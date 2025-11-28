@@ -26,6 +26,7 @@ export default function OceanTable({
   onSort,
 }) {
   const [sortState, setSortState] = useState({ key: null, dir: "asc" });
+  const [announce, setAnnounce] = useState("");
 
   const sortedData = useMemo(() => {
     if (!sortState.key) return data;
@@ -55,14 +56,23 @@ export default function OceanTable({
       if (typeof onSort === "function") {
         onSort(key, nextDir);
       }
+      setAnnounce(`Sorted by ${key} ${nextDir}`);
       return { key, dir: nextDir };
     });
   };
 
   return (
-    <div className="ocean-card">
+    <div className="ocean-card" data-surface="card">
+      {/* live region for sort announcements */}
+      <div className="sr-only" aria-live="polite" aria-atomic="true">{announce}</div>
+
       {caption ? (
-        <div className="ocean-card__band" role="heading" aria-level={2}>
+        <div
+          className="ocean-card__band band--sticky"
+          role="heading"
+          aria-level={2}
+          data-surface="band"
+        >
           <div className="band-title">{caption}</div>
           <div className="band-actions" aria-label="Actions">
             <button className="btn btn-primary" type="button">Run</button>
@@ -93,7 +103,7 @@ export default function OceanTable({
                       aria-label={`Sort by ${col.header}${dir ? `, ${dir}` : ""}`}
                       aria-sort={active ? (dir === "asc" ? "ascending" : "descending") : "none"}
                     >
-                      <span>{col.header.toUpperCase()}</span>
+                      <span className="th-label">{col.header.toUpperCase()}</span>
                       {enableSortIcons ? (
                         <span className={`sort-icon ${active ? dir : ""}`} aria-hidden="true">
                           <svg width="12" height="12" viewBox="0 0 20 20" fill="none">
@@ -117,10 +127,15 @@ export default function OceanTable({
               </tr>
             ) : (
               sortedData.map((row, idx) => (
-                <tr key={row.id ?? `r_${idx}`} className="ocean-row" tabIndex={0} aria-selected="false">
+                <tr
+                  key={row.id ?? `r_${idx}`}
+                  className="ocean-row"
+                  tabIndex={0}
+                  aria-selected="false"
+                  data-row
+                >
                   {columns.map((col) => {
                     const value = row[col.key];
-                    // Render status as a chip/badge if looks like a status
                     if (col.key.toLowerCase().includes("status")) {
                       return (
                         <td key={col.key} className={`td-${col.align || "left"}`}>
@@ -160,8 +175,10 @@ function formatCell(val) {
 }
 
 /**
+ * PUBLIC_INTERFACE
  * StatusChip
  * Simple pill chip with Ocean Professional colors mapped by status value.
+ * Ensures accessible contrast and consistent sizing.
  */
 function StatusChip({ value }) {
   const v = String(value).toLowerCase();
@@ -169,5 +186,5 @@ function StatusChip({ value }) {
   if (["complete", "success", "paid"].includes(v)) tone = "success";
   else if (["pending", "hold", "processing"].includes(v)) tone = "info";
   else if (["failed", "error", "canceled"].includes(v)) tone = "danger";
-  return <span className={`chip chip-${tone}`}>{value}</span>;
+  return <span className={`chip chip-${tone}`} role="status" aria-label={`status: ${value}`}>{value}</span>;
 }
