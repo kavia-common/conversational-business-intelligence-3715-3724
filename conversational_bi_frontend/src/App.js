@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import logo from './logo.svg';
 import './App.css';
-import MessagesList from './components/MessagesList';
+import OceanTable from './components/Table/OceanTable';
 
-// PUBLIC_INTERFACE
+/**
+ * PUBLIC_INTERFACE
+ * App
+ * Renders a demo Ocean Professional table on the main page so it is visible at /.
+ */
 function App() {
   const [theme, setTheme] = useState('light');
 
-  // Effect to apply theme to document element
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
@@ -17,38 +19,48 @@ function App() {
     setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
   };
 
-  // Messages are rendered via a single-wrapper-per-message pattern.
-  // This placeholder ensures no behavior change until the app wires real data.
-  const messages = [];
+  // Mock columns and data for immediate rendering
+  const columns = [
+    { key: 'id', header: 'ID', width: '80px', align: 'left' },
+    { key: 'name', header: 'Name', align: 'left' },
+    { key: 'quantity', header: 'Quantity', align: 'right', width: '120px' },
+    { key: 'price', header: 'Price', align: 'right', width: '120px' },
+    { key: 'status', header: 'Status', align: 'center', width: '140px' },
+  ];
+
+  const data = [
+    { id: 1001, name: 'Atlantic Salmon', quantity: 12, price: 199.99, status: 'Complete' },
+    { id: 1002, name: 'Pacific Mackerel', quantity: 8, price: 89.50, status: 'Pending' },
+    { id: 1003, name: 'Yellowfin Tuna', quantity: 4, price: 349.00, status: 'Failed' },
+    { id: 1004, name: 'Swordfish Steaks', quantity: 22, price: 129.00, status: 'Processing' },
+    { id: 1005, name: 'Sea Scallops', quantity: 16, price: 249.00, status: 'Paid' },
+    { id: 1006, name: 'Halibut Fillet', quantity: 6, price: 279.00, status: 'Pending' },
+  ];
 
   return (
     <div className="App app-gradient">
-      <header className="App-header">
-        <button 
-          className="theme-toggle" 
+      <header className="App-header" style={{ alignItems: 'stretch' }}>
+        <button
+          className="theme-toggle"
           onClick={toggleTheme}
           aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
         >
           {theme === 'light' ? '🌙 Dark' : '☀️ Light'}
         </button>
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <p>
-          Current theme: <strong>{theme}</strong>
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
 
-        {/* Semantic messages container. Empty by default to preserve behavior. */}
-        <MessagesList messages={messages} />
+        <main className="messages-container" style={{ width: '100%', maxWidth: 1000 }}>
+          <h1 className="title" style={{ textAlign: 'left', marginBottom: 8, fontSize: 20 }}>
+            Orders
+          </h1>
+          <OceanTable
+            caption="Orders"
+            ariaLabel="Orders table"
+            columns={columns}
+            data={data}
+            stickyHeader
+            enableSortIcons
+          />
+        </main>
       </header>
     </div>
   );
