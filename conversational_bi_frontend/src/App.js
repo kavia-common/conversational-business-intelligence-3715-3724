@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import MessagesList from './components/MessagesList';
 
 // PUBLIC_INTERFACE
 function App() {
@@ -16,8 +17,12 @@ function App() {
     setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
   };
 
+  // Messages are rendered via a single-wrapper-per-message pattern.
+  // This placeholder ensures no behavior change until the app wires real data.
+  const messages = [];
+
   return (
-    <div className="App">
+    <div className="App app-gradient">
       <header className="App-header">
         <button 
           className="theme-toggle" 
@@ -41,6 +46,9 @@ function App() {
         >
           Learn React
         </a>
+
+        {/* Semantic messages container. Empty by default to preserve behavior. */}
+        <MessagesList messages={messages} />
       </header>
     </div>
   );

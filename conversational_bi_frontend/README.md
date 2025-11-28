@@ -80,3 +80,51 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+
+---
+
+## Conversation Messages Rendering (Ocean Professional)
+
+This frontend includes a semantic and accessible messages list that follows the “single wrapper per message” pattern (Option B). It eliminates extra wrappers and avoids empty containers when items are removed.
+
+### Rendering Pattern
+
+- One wrapper per message (`.message-block`).
+- For `role: "result"` messages, render `<ResultTable .../>` followed by a single timestamp.
+- For other roles, render the message text followed by a single timestamp.
+- The list is wrapped with a semantic container:
+  - `<section aria-label="Conversation">`
+  - `<div role="list">`
+  - Each message wrapper has `role="listitem"`.
+
+### Stable Keys
+
+Keys are never array indices. The helper `getMessageKey(m)` uses:
+1. `m.id` (preferred)
+2. ISO string of `m.timestamp` (if present)
+3. A stable hash of `role + content + timestamp` (last resort)
+
+This ensures React diffing behaves correctly and no stray DOM nodes remain after deletions.
+
+### Timestamp
+
+`formatTime(ts)` renders a 24-hour HH:MM time. Timestamps are displayed once per message using a small, subdued style (`.message-timestamp`).
+
+### Theme & Styles
+
+The list aligns to the Ocean Professional theme:
+- App gradient: `from-blue-500/10 to-gray-50` analogue (`.app-gradient`)
+- Card-like message surfaces: rounded-xl, subtle ring and shadow
+- Subdued timestamp color and small size
+
+All styles are implemented with minimal CSS in `src/App.css`, without requiring Tailwind.
+
+### Files
+
+- `src/components/MessagesList.jsx` — Semantic messages list with utilities:
+  - `getMessageKey`, `formatTime` (exported)
+- `src/components/ResultTable.jsx` — Minimal result table for `role: "result"`
+- `src/App.css` — Gradient and chat styles
+
+Integrate by passing your messages array into `<MessagesList messages={messages} />`. The component renders nothing when the array is empty, preserving current behavior.

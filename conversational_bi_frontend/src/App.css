@@ -1,4 +1,4 @@
-/* CSS Variables for Theme Management */
+ /* CSS Variables for Theme Management */
 :root {
   /* Light theme colors */
   --bg-primary: #ffffff;
@@ -101,4 +101,106 @@
     padding: 8px 16px;
     font-size: 12px;
   }
+}
+
+/* -------- Ocean Professional Additions -------- */
+
+/* Subtle app gradient (from-blue-500/10 to-gray-50 analogue) */
+.app-gradient {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.10), #f9fafb);
+}
+
+/* Messages container with centered max width and consistent spacing */
+.messages-container {
+  width: 100%;
+  max-width: 800px; /* close to bubble width guidance */
+  margin: 24px auto 0 auto;
+  padding: 0 16px;
+  text-align: left; /* ensure messages are left-aligned within card */
+}
+
+.messages-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px; /* 8px baseline scale */
+}
+
+/* Single wrapper per message, card-like surface */
+.message-block {
+  background: #ffffff;
+  border-radius: 12px; /* rounded-xl */
+  box-shadow: 0 1px 2px rgba(0,0,0,0.06); /* shadow-sm */
+  border: 1px solid rgba(0,0,0,0.05); /* ring-1 ring-black/5 analogue */
+  padding: 12px; /* 12–16px internal padding */
+  margin-bottom: 8px; /* spacing rhythm */
+}
+
+/* Message content */
+.message {
+  color: #111827; /* text-primary */
+  white-space: pre-wrap; /* preserve formatting in chat content */
+  line-height: 1.5;
+  font-size: 14px;
+}
+
+/* Role-specific hooks (can extend later) */
+.message.user {
+  color: #111827;
+}
+
+.message.assistant {
+  color: #111827;
+}
+
+/* Subdued, single timestamp per message */
+.message-timestamp {
+  margin-top: 6px;
+  font-size: 12px; /* caption size */
+  color: #6b7280; /* gray-500 */
+  text-align: right;
+}
+
+/* Minimal result table styling inside a message block */
+.result-table {
+  width: 100%;
+}
+
+.result-table__meta {
+  font-size: 12px;
+  color: #6b7280;
+  margin-bottom: 6px;
+}
+
+.result-table__empty {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.result-table__scroller {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid #e5e7eb; /* gray-200 */
+  border-radius: 8px;
+  background: #fff;
+}
+
+.result-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.result-table thead {
+  background-color: #f3f4f6; /* gray-100/50 */
+  color: #6b7280; /* gray-500 */
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  font-size: 12px;
+}
+
+.result-table th,
+.result-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #f3f4f6;
+  text-align: left;
 }
